@@ -39,7 +39,7 @@ with col_logo:
             font-family: 'Space Mono', monospace;
             font-size: 14px;
             font-weight: 700;
-            color: #000000 !important;
+            color: #0a0f1a;
             background: linear-gradient(135deg, #22d3ee, #06b6d4);
             padding: 8px 14px;
             border-radius: 10px;
@@ -98,6 +98,10 @@ elif st.session_state.current_page == "8_cartograma":
     from pages import modulo_8_cartograma
     modulo_8_cartograma.render()
 
+elif st.session_state.current_page == "sobre":
+    from pages import modulo_sobre
+    modulo_sobre.render()
+
 elif st.session_state.current_page == "feedback":
     from pages import modulo_feedback
     modulo_feedback.render()
@@ -153,11 +157,15 @@ else:
                     go_to(key)
                     st.rerun()
 
-    # Feedback button
-    st.markdown("<br>", unsafe_allow_html=True)
-    _, col_fb, _ = st.columns([3, 2, 3])
-    with col_fb:
-        if st.button("💬 Sugestões e Feedback", key="hub_feedback", use_container_width=True):
+    # Action buttons (aligned with module grid)
+    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+    col_a, col_sobre, col_feedback, col_d = st.columns(4, gap="small")
+    with col_sobre:
+        if st.button("ℹ️ Sobre o App", key="hub_sobre", use_container_width=True, type="secondary"):
+            go_to("sobre")
+            st.rerun()
+    with col_feedback:
+        if st.button("💬 Sugestões e Feedback", key="hub_feedback", use_container_width=True, type="secondary"):
             go_to("feedback")
             st.rerun()
 
@@ -167,7 +175,6 @@ else:
         Dados:
         <a href="https://dadosabertos.bcb.gov.br/" target="_blank">dadosabertos.bcb.gov.br</a>
         · IF.Data API · python-bcb
-        <br>Desenvolvido para fins educacionais
         <br>José Américo Antunes - BCB-Coppead-FGV-UCAM
     </div>
     """, unsafe_allow_html=True)

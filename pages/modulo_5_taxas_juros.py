@@ -63,11 +63,40 @@ def short_label(mod: str) -> str:
 
 
 # ─────────────────────────────────────────────
-# DATA FETCHING
+# DATA FETCHING (Parquet-first, API-fallback)
 # ─────────────────────────────────────────────
 
-@st.cache_data(ttl=3600, show_spinner=False)
+def _slugify(name: str) -> str:
+    import re
+    s = name.lower()
+    for old, new in [("é","e"),("á","a"),("ã","a"),("â","a"),("í","i"),
+                      ("ó","o"),("ú","u"),("ç","c"),("ê","e"),("ô","o")]:
+        s = s.replace(old, new)
+    s = re.sub(r"[^a-z0-9]+", "_", s)
+    return s.strip("_")[:80]
+
+
+def _data_dir():
+    from pathlib import Path
+    return Path(__file__).resolve().parent.parent / "data"
+
+
+@st.cache_data(ttl=86400, show_spinner=False)
 def fetch_daily_modality(modality: str, limit: int = 200000) -> pd.DataFrame:
+    # 1. Try Parquet
+    slug = _slugify(modality)
+    ppath = _data_dir() / f"taxas_d_{slug}.parquet"
+    if ppath.is_file():
+        try:
+            df = pd.read_parquet(ppath)
+            if not df.empty:
+                if "InicioPeriodo" in df.columns:
+                    df["InicioPeriodo"] = pd.to_datetime(df["InicioPeriodo"], errors="coerce")
+                return df
+        except Exception:
+            pass
+
+    # 2. Fallback to API
     from bcb import TaxaJuros
     em = TaxaJuros()
     ep = em.get_endpoint("TaxasJurosDiariaPorInicioPeriodo")
@@ -83,8 +112,22 @@ def fetch_daily_modality(modality: str, limit: int = 200000) -> pd.DataFrame:
     return df
 
 
-@st.cache_data(ttl=3600, show_spinner=False)
+@st.cache_data(ttl=86400, show_spinner=False)
 def fetch_monthly_modality(modality: str, limit: int = 200000) -> pd.DataFrame:
+    # 1. Try Parquet
+    slug = _slugify(modality)
+    ppath = _data_dir() / f"taxas_m_{slug}.parquet"
+    if ppath.is_file():
+        try:
+            df = pd.read_parquet(ppath)
+            if not df.empty:
+                if "Mes" in df.columns:
+                    df["Mes"] = pd.to_datetime(df["Mes"], errors="coerce")
+                return df
+        except Exception:
+            pass
+
+    # 2. Fallback to API
     from bcb import TaxaJuros
     em = TaxaJuros()
     ep = em.get_endpoint("TaxasJurosMensalPorMes")
@@ -251,7 +294,6 @@ def render():
     st.markdown("""
     <div class="footer">
         Dados: <a href="https://dadosabertos.bcb.gov.br/" target="_blank">dadosabertos.bcb.gov.br</a>
-        · TaxaJuros API · Desenvolvido para fins educacionais — COPPEAD/UFRJ
     </div>
     """, unsafe_allow_html=True)
 
