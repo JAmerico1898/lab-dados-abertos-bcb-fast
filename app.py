@@ -117,7 +117,7 @@ else:
         <div class="api-badge">API DADOS ABERTOS BCB</div>
         <h1 class="hub-title">Laboratório de Dados Públicos</h1>
         <p class="hub-desc">
-            Explore, visualize e exporte dados do Portal de Dados Abertos do Banco Central do Brasil.
+            Explore e visualize dados do Portal de Dados Abertos do Banco Central do Brasil.
             Consulte APIs oficiais e gere relatórios personalizados em poucos cliques.
         </p>
     </div>
