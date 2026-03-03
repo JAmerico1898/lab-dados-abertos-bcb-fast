@@ -2,8 +2,6 @@
 
 Portal interativo para exploração e visualização de dados do **Banco Central do Brasil**, construído com [Streamlit](https://streamlit.io/) e a biblioteca [python-bcb](https://github.com/wilsonfreitas/python-bcb).
 
-Desenvolvido para fins educacionais — **COPPEAD/UFRJ**.
-
 ---
 
 ## Visão Geral
