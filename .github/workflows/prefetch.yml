@@ -1,9 +1,11 @@
 name: Prefetch BCB Data
 
 on:
-  # Run weekly on Mondays at 06:00 UTC (03:00 BRT)
+  # Primary: first day of each month at 06:00 UTC (03:00 BRT)
   schedule:
-    - cron: '0 6 * * 1'
+    - cron: '0 6 1 * *'
+    # Retry: day 3 of each month (in case day 1 failed)
+    - cron: '0 6 3 * *'
 
   # Allow manual trigger
   workflow_dispatch:
