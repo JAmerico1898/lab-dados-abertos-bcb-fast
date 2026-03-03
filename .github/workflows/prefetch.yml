@@ -1,0 +1,48 @@
+name: Prefetch BCB Data
+
+on:
+  # Run weekly on Mondays at 06:00 UTC (03:00 BRT)
+  schedule:
+    - cron: '0 6 * * 1'
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  prefetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyarrow
+
+      - name: Run prefetch script
+        run: python scripts/prefetch_data.py
+
+      - name: Check generated files
+        run: |
+          echo "Generated files:"
+          ls -lh data/*.parquet 2>/dev/null || echo "No parquet files"
+          cat data/manifest.json 2>/dev/null || echo "No manifest"
+
+      - name: Commit and push data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --staged --quiet || (
+            git commit -m "chore: update BCB data $(date +%Y-%m-%d)"
+            git push
+          )

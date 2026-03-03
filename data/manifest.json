@@ -1,0 +1,26 @@
+{
+  "latest_quarter": 202509,
+  "quarters": [
+    202509,
+    202506,
+    202503,
+    202412
+  ],
+  "generated_at": "2026-03-03T14:37:30.181102",
+  "files": [
+    "cadastro_202509.parquet",
+    "valores_202412_t1_r1.parquet",
+    "valores_202412_t1_r4.parquet",
+    "valores_202503_t1_r1.parquet",
+    "valores_202503_t1_r4.parquet",
+    "valores_202506_t1_r1.parquet",
+    "valores_202506_t1_r4.parquet",
+    "valores_202509_t1_r1.parquet",
+    "valores_202509_t1_r11.parquet",
+    "valores_202509_t1_r13.parquet",
+    "valores_202509_t1_r2.parquet",
+    "valores_202509_t1_r3.parquet",
+    "valores_202509_t1_r4.parquet",
+    "valores_202509_t1_r9.parquet"
+  ]
+}
