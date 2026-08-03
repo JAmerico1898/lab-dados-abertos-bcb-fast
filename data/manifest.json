@@ -6,10 +6,11 @@
     202509,
     202506
   ],
-  "generated_at": "2026-07-03T09:10:12.133402",
+  "generated_at": "2026-08-03T09:45:58.200717",
   "files": [
     "cadastro_202509.parquet",
     "cadastro_202512.parquet",
+    "cadastro_202603.parquet",
     "taxas_d_adiantamento_sobre_contratos_de_cambio_acc_pos_fixado_referenciado_em_moeda_estr.parquet",
     "taxas_d_antecipacao_de_faturas_de_cartao_de_credito_prefixado.parquet",
     "taxas_d_aquisicao_de_outros_bens_prefixado.parquet",
